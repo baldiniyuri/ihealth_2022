@@ -1,0 +1,47 @@
+version: '3.3'
+
+services:
+  app:
+    build:
+      context: .
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000 &&
+             celery -A app beat"
+    ports:
+      - 8000:8000
+    volumes:
+      - ./app:/app
+      - ./data/web:/vol/web
+    environment:
+      - SECRET_KEY=devsecretkey
+      - DEBUG=1
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+
+  redis:
+    container_name: ihealth_redis
+    image: redis:5.0.7
+    restart: always
+    ports:
+      - 6379:6379
+  
+  celery_broker:
+    container_name: ihealth_celery_broker
+    image: rabbitmq:3.8.2
+    restart: always
+    ports:
+      - 5672:5672
