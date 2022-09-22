@@ -39,30 +39,32 @@ class GlucoseView(APIView):
         else:
             glucose = Glucose.objects.filter(user=user_id)
         
-     
+        user = User.objects.get(id=user_id)
+        full_name = '{} {}'.format(user.first_name, user.last_name)
+
         serializer = GlucoseSerializer(glucose, many=True)
 
-        return Response({'username': request.user.username, 'glucose_level':serializer.data}, status=status.HTTP_200_OK)
+        return Response({'user': full_name, 'glucose_level':serializer.data}, status=status.HTTP_200_OK)
 
 
-    def post(self, request, user_id):
+    def post(self, request):
+        serializer = GlucoseSerializer(data=request.data)
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = GlucoseSerializer(data=request.data)
 
-        found_user = User.objects.filter(id=user_id)
+        found_user = User.objects.filter(id=request.data['user_id'])
 
         if not found_user:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        check_credencials = CheckUserToken(request, user_id)
+        check_credencials = CheckUserToken(request, request.data['user_id'])
 
         if not check_credencials:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        glucose = Glucose.objects.create(user_id=user_id, **request.data) 
+        glucose = Glucose.objects.create(**request.data) 
 
         serializer = GlucoseSerializer(glucose)
 
