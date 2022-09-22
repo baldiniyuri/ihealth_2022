@@ -20,9 +20,7 @@ class GlucoseView(APIView):
         if not found_user:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        check_credencials = CheckUserToken(request, user_id)
-
-        if not check_credencials:
+        if not CheckUserToken(request, user_id):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         min = self.request.query_params.get('min', '')
@@ -59,9 +57,8 @@ class GlucoseView(APIView):
         if not found_user:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        check_credencials = CheckUserToken(request, request.data['user_id'])
 
-        if not check_credencials:
+        if not CheckUserToken(request, request.data['user_id']):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         glucose = Glucose.objects.create(**request.data) 

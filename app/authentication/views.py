@@ -14,7 +14,7 @@ class UsersView(APIView):
 
         serializer = UserSerializer(data=request.data)
 
-        if not serializer.is_valid():
+        if not UserSerializer(data=request.data).is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         find_user_by_email = User.objects.filter(email=request.data['email']).exists()
@@ -34,9 +34,7 @@ class UsersView(APIView):
 class LoginView(APIView):
     def post(self, request):
 
-        malicious_ip = Blacklist(request)
-
-        if malicious_ip:
+        if Blacklist(request):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         serializer = CredentialSerializer(data=request.data)
@@ -71,9 +69,7 @@ class ProfilePictureView(APIView):
     
     def put(self, request, *args, **kwargs):
 
-        malicious_ip = Blacklist(request)
-
-        if malicious_ip:
+        if Blacklist(request):
             return Response(status=status.HTTP_403_FORBIDDEN)
      
         try:
@@ -92,9 +88,8 @@ class ProfilePictureView(APIView):
     
 
     def get(self, request, user_id):
-        malicious_ip = Blacklist(request)
 
-        if malicious_ip:
+        if Blacklist(request):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         found_user = User.objects.filter(pk=user_id)
