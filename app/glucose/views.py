@@ -39,10 +39,12 @@ class GlucoseView(APIView):
         else:
             glucose = Glucose.objects.filter(user=user_id)
         
-     
+        user = User.objects.get(id=user_id)
+        full_name = '{} {}'.format(user.first_name, user.last_name)
+
         serializer = GlucoseSerializer(glucose, many=True)
 
-        return Response({'username': request.user.username, 'glucose_level':serializer.data}, status=status.HTTP_200_OK)
+        return Response({'user': full_name, 'glucose_level':serializer.data}, status=status.HTTP_200_OK)
 
 
     def post(self, request):
