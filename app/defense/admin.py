@@ -32,10 +32,8 @@ class DefenseViewAdminView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         user = User.objects.get(id=admin_id)
-   
-        check_credencials = CheckUserToken(request, admin_id)
 
-        if check_credencials and user.is_superuser:
+        if CheckUserToken(request, admin_id) and user.is_superuser:
 
             Defense.objects.filter(ip=attack_ip).all().delete()
             
