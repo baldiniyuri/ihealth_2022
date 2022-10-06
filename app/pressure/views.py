@@ -46,18 +46,16 @@ class BloodPressureView(APIView):
             return Response({"Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-    def post(self, request, user_id):
+    def post(self, request):
         serializer = BloodPressueSerializers(data=request.data)
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        found_user = User.objects.filter(id=user_id)
-
-        if not found_user:
+        if not FindUser(request.data['user_id']):
             return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        user = User.objects.get(id=user_id)  
+        user = User.objects.get(id=request.data['user_id'])  
      
         
         pressure = BloodPressue.objects.create(user=user, **request.data) 
