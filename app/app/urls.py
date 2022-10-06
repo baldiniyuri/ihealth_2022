@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/', include('glucose.urls')),
     path('api/', include('pressure.urls')),
     path('api/', include('temperature.urls')),
+    path('api/', include('historic.urls')),
 ]

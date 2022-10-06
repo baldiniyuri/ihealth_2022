@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'defense',
     'glucose',
     'pressure',
-    'temperature'
+    'temperature',
+    'historic'
 ]
 
 MIDDLEWARE = [
