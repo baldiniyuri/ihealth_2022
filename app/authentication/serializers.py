@@ -5,7 +5,7 @@ class UserSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     first_name = serializers.CharField()
     last_name = serializers.CharField()
-    password = serializers.CharField()
+    password = serializers.CharField(write_only=True)
     city = serializers.CharField()
     uf = serializers.CharField()
     country = serializers.CharField()
@@ -17,7 +17,8 @@ class UserSerializer(serializers.Serializer):
 
 class CredentialSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+    
     
 class ProfilePictureSerializers(serializers.Serializer):
     user_id = serializers.IntegerField(read_only=True)

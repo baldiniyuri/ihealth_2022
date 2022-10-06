@@ -9,12 +9,13 @@ from app.core import DeleteUserToken
 from defense.blacklist import Blacklist
 from django.contrib.auth import authenticate
 
+
 class UsersView(APIView):
     def post(self, request):
 
         serializer = UserSerializer(data=request.data)
 
-        if not UserSerializer(data=request.data).is_valid():
+        if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         find_user_by_email = User.objects.filter(email=request.data['email']).exists()
@@ -22,7 +23,7 @@ class UsersView(APIView):
         if find_user_by_email:
             return Response(serializer.data, status=status.HTTP_409_CONFLICT)
         
-        user = User.objects.create_user(username=request.data['email'],is_staff=False, is_superuser=False,**request.data)
+        user = User.objects.create_user(username=request.data['email'],**request.data)
 
         token = Token.objects.get_or_create(user=user)[0]
       
