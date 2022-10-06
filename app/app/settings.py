@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'authentication',
     'defense',
-    'glucose'
+    'glucose',
+    'pressure'
 ]
 
 MIDDLEWARE = [

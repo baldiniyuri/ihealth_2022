@@ -21,4 +21,5 @@ urlpatterns = [
     path('api/', include('authentication.urls')),
     path('api/', include('defense.urls')),
     path('api/', include('glucose.urls')),
+    path('api/', include('pressure.urls')),
 ]

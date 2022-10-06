@@ -12,7 +12,7 @@ from app.core import CheckUserToken, FindUser, CheckAdminOrMedicCredentials
 class GlucoseView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-
+    queryset = Glucose.objects.all()
     
     def get(self, request, user_id):
      
@@ -32,9 +32,10 @@ class GlucoseView(APIView):
             lookup_filter = {}
             lookup_filter[f'{param}__gte'] = min
             lookup_filter[f'{param}__lte'] = max
-            glucose = Glucose.objects.filter(**lookup_filter, user=user_id)
+
+            glucose = self.queryset.filter(**lookup_filter, user=user_id)
         else:
-            glucose = Glucose.objects.filter(user=user_id)
+            glucose = self.queryset.filter(user=user_id)
         
         user = User.objects.get(id=user_id)
         full_name = '{} {}'.format(user.first_name, user.last_name)
@@ -71,7 +72,7 @@ class GlucoseView(APIView):
 class GlucoseMedicView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-
+    queryset = Glucose.objects.all()
     
     def get(self, request, user_id, medic_id):
 
@@ -92,9 +93,9 @@ class GlucoseMedicView(APIView):
             lookup_filter[f'{param}__gte'] = min
             lookup_filter[f'{param}__lte'] = max
             
-            glucose = Glucose.objects.filter(**lookup_filter, user=user_id)
+            glucose = self.queryset.filter(**lookup_filter, user=user_id)
         else:
-            glucose = Glucose.objects.filter(user=user_id)
+            glucose = self.queryset.filter(user=user_id)
         
         user = User.objects.get(id=user_id)
         full_name = '{} {}'.format(user.first_name, user.last_name)
