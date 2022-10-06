@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'authentication',
     'defense',
     'glucose',
-    'pressure'
+    'pressure',
+    'temperature'
 ]
 
 MIDDLEWARE = [
