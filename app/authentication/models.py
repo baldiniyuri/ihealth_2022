@@ -9,6 +9,7 @@ class User(AbstractUser):
     country = models.CharField(max_length=255)
     image = models.ImageField(null=True, blank=True)
     email = models.EmailField(unique=True)
-    is_staff = models.BooleanField(null=True, blank=True, default=False)
+    is_pacient = models.BooleanField()
+    is_medic = models.BooleanField()
     is_superuser = models.BooleanField(null=True, blank=True, default=False)
 

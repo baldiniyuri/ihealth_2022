@@ -11,7 +11,8 @@ class UserSerializer(serializers.Serializer):
     country = serializers.CharField()
     image = serializers.ImageField(required=False)
     email = serializers.EmailField()
-    is_staff = serializers.BooleanField(required=False)
+    is_pacient = serializers.BooleanField()
+    is_medic = serializers.BooleanField()
     is_superuser = serializers.BooleanField(required=False)
 
 
@@ -19,7 +20,7 @@ class CredentialSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     
-    
+
 class ProfilePictureSerializers(serializers.Serializer):
     user_id = serializers.IntegerField(read_only=True)
     image = serializers.ImageField()
